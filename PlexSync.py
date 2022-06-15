@@ -1,7 +1,4 @@
 #!/usr/bin/python3
-
-from dbm.ndbm import library
-from unicodedata import name
 import plexapi
 from plexapi.myplex import MyPlexAccount
 from plexapi.server import PlexServer
@@ -45,7 +42,6 @@ while item < len(watchlist):
     Watchlist_item = (watchlist[item])
     result = plex.library.search(guid=Watchlist_item.guid, libtype=Watchlist_item.type)
     home_result = home_plex.library.search(guid=Watchlist_item.guid, libtype=Watchlist_item.type)
-    print (Watchlist_item.type)
     #if the watchlist item is a TV Show
     if Watchlist_item.type == "show" :
         if result != None:
@@ -59,7 +55,7 @@ while item < len(watchlist):
                     directory = directory.parts[2]
                     directory = tv_folder+directory
                     print("syncing {}...".format(title))
-                    subprocess.call(["rsync", "-a","-v","--backup","{}".format(directory), "{}@{}::files{}".format(user, ip, home_tv_folder)])            
+                    subprocess.call(["rsync", "-a","-v","--backup","--progress","{}".format(directory), "{}@{}::files{}".format(user, ip, home_tv_folder)])            
             except Exception:
                 pass
             #if any errors
@@ -79,7 +75,8 @@ while item < len(watchlist):
                 directory = directory.parts[2]
                 directory = movie_folder+directory
                 print("syncing {}...".format(title))
-                subprocess.call(["rsync", "-a","-v","--backup","{}".format(directory), "{}@{}::files{}".format(user, ip, home_tv_folder)])
+                subprocess.call(["rsync", "-a","-v","--backup","--progress","{}".format(directory), "{}@{}::files{}".format(user, ip, home_movie_folder)])
+                home_account.removeFromWatchlist(Watchlist_item)
             except Exception:
                 pass
             #if any errors
