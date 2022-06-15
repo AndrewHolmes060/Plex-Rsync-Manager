@@ -6,12 +6,12 @@ openssh
 plexapi
 
 
-
+# How to use
 add an item to your watchlist and run the script/have the script run as a cronjob
 
 
 
-How to configure:
+# How to configure:
 
 setup a rsync daemon config file [guide to setup rsync daemon](https://www.atlantic.net/vps-hosting/how-to-setup-rsync-daemon-linux-server/)
 
