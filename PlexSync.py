@@ -15,8 +15,6 @@ home_movie_folder = '/Movies/'
 user = 'name of rsync user'
 
 
-
-
 #remote server details to grab videos and sync
 remote_url = 'remote access address for remote plex server'
 token = 'token'
@@ -31,7 +29,8 @@ home_plex = PlexServer(home_url, home_token)
 account = MyPlexAccount(token)
 plex = PlexServer(remote_url, token)
 
-
+remote_server_user = home_account.resource('Notflix')
+watched_remote = remote_server_user.connect()
 
 #get user watchlist
 watchlist = home_account.watchlist()
@@ -88,6 +87,42 @@ while item < len(watchlist):
     else:
         #finished checking the watchlist
         item = item + 1
+
+        #syncing watched TV Shows between servers
+        remote_plex_shows = set(list(map((lambda x: x.title), watched_remote.library.section('TV').search())))
+        home_plex_shows = set(list(map((lambda x: x.title), home_plex.library.section('TV Shows').search())))
+        common_shows = remote_plex_shows & home_plex_shows
+        for show_name in common_shows:
+            remote_plex_show = watched_remote.library.section('TV').get(show_name)
+            home_plex_show = home_plex.library.section('TV Shows').get(show_name)
+            for ep in remote_plex_show.episodes():
+                for ep2 in home_plex_show.episodes():
+                    if ep.title == ep2.title:
+                        if ep2.isWatched and not ep.isWatched:
+                            print("marking {} as watched on remote server".format(ep))
+                            ep.markWatched()
+                        elif ep.isWatched and not ep2.isWatched:
+                            print("marking {} as watched on home server".format(ep))
+                            ep2.markWatched()
+                        break
+        
+        #syncing watched movies between servers
+        remote_plex_movies = set(list(map((lambda x: x.title), watched_remote.library.section('Movies').search())))
+        home_plex_movies = set(list(map((lambda x: x.title), home_plex.library.section('Films').search())))
+        common_movies = remote_plex_movies & home_plex_movies
+        for movie_name in common_movies:
+            remote_plex_movies = watched_remote.library.section('Movies').get(movie_name)
+            home_plex_movies = home_plex.library.section('Films').get(movie_name)
+            for watched_movie_home in remote_plex_movies:
+                for watched_movie_remote in home_plex_movies:
+                    if watched_movie_home.title == watched_movie_remote.title:
+                        if watched_movie_home.isWatched and not watched_movie_remote.isWatched:
+                            print("marking {} as watched on home server".format(watched_movie_remote))
+                            watched_movie_remote.markWatched()
+                        elif watched_movie_remote.isWatched and not watched_movie_home.isWatched:
+                            print("marking {} as watched on remote server".format(watched_movie_home))
+                            watched_movie_home.markWatched()
+                        break
         print("all done!")
         exit
 
