@@ -51,7 +51,6 @@ remote_url = ("http://"+remote_connected_server.publicAddress+":"+remote_connect
 
 #connect to remote server
 plex = PlexServer(remote_url, remote_token)
-print(remote_url)
 
 #get user watchlist
 watchlist = home_account.watchlist()
@@ -74,10 +73,9 @@ while item < len(watchlist):
                     dir_length = ("{}".format(directory))
                     dir_list = dir_length.split('/')
                     directory = directory.parts[len(dir_list)-3]
-                    print(directory)
                     directory = tv_folder+directory
                     print("syncing {}...".format(title))
-                    subprocess.call(["rsync", "-a","-v","-O","--backup","--progress","{}".format(directory), "{}@{}::files{}".format(user, home_ip, home_tv_folder)])
+                    subprocess.run(["rsync", "-avO", "--ignore-existing", "--bwlimit=100000","--progress","{}".format(directory), "{}@{}::files{}/".format(user, home_ip, home_tv_folder)])
                     sonarr_series = sonarr.search_series(title)
                     sonarr_status = sonarr_series[0].status
                     print("This show status is: {}".format(sonarr_status))
@@ -112,10 +110,9 @@ while item < len(watchlist):
                 dir_length = ("{}".format(directory))
                 dir_list = dir_length.split('/')
                 directory = directory.parts[len(dir_list)-2]
-                print(directory)
                 directory = movie_folder+directory
                 print("syncing {}...".format(title))
-                subprocess.run(["rsync", "-a","-v","-O","--bwlimit=100000","--backup","--progress","{}".format(directory), "{}@{}::files{}".format(user, home_ip, home_movie_folder)])
+                subprocess.run(["rsync", "-avO", "--bwlimit=100000", "--ignore-existing", "--progress","{}".format(directory), "{}@{}::files{}".format(user, home_ip, home_movie_folder)])
                 home_account.removeFromWatchlist(Watchlist_item)
             except Exception as e: print(e)
            #if any errors
