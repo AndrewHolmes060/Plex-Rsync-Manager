@@ -4,33 +4,38 @@ A small python script to sync files from a remote plex server to another plex se
 # Requirements:
 openssh 
 plexapi
-
+sonarr
 
 # How to use
-add an item to your watchlist and run the script/have the script run as a cronjob
+add an item to your watchlist and run the script and the file will use rsync to transfer the file
 
+have the script run as a cronjob for automated server updating
 
+This script uses sonarr to reference whether a show is ongoing or ended to decide whether or not to remove them from your watchlist automatically
 
 # How to configure:
 
-setup a rsync daemon config file [guide to setup rsync daemon](https://www.atlantic.net/vps-hosting/how-to-setup-rsync-daemon-linux-server/)
+you will need to setup an rsync daemon witha credentials secret on the server thats set to recieve the files: [guide to setup rsync daemon](https://www.atlantic.net/vps-hosting/how-to-setup-rsync-daemon-linux-server/)
 
-ip = 'remote access IP for your home server'
+as rsync runs in daemon mode it needs port 873 on the recievers router to be open.
 
-port = 'port of remote access for home plex server'
+then on the server thats sending the files add this script and change the variables to reflect your desired states:
 
-home_token = 'token of your home server'
+user = 'user in the recievers rsync secrets file'
 
-home_tv_folder = 'folder of your TV series on your home plex server'
+#details for recieving server to send files and read watchlist
+home_token = 'plex token of user whos recieving server'
+home_tv_folder = '/TV/Folder/from/rsync/location/'
+home_movie_folder = '/Movie/Folder/from/rsync/location/'
+server_name = 'Name Of Plex Server to recieve files'
 
-home_movie_folder = 'folder of your Movies on your home plex server'
+#details for the sending server
+remote_token = 'token of user who managed sending server'
+tv_folder = '/TV/Folder/from/plex/location/'
+movie_folder = '/movie/Folder/from/plex/location/'
+remote_server_name='sending server name'
 
-user = 'name of rsync daemon user'
-
-remote_url = 'remote access address for remote plex server'
-
-token = 'remote plex token'
-
-tv_folder = 'folder path of TV series on your plex server'
-
-movie_folder = 'folder path of Movies on your plex server'
+#Sonarr connect
+# Set Host URL and API-Key
+sonarr_url = 'URL for Sonarr'
+sonarr_api_key = 'Sonarr API Key'
