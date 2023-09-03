@@ -35,7 +35,7 @@ sonarr_api_key = 'Sonarr API Key'
 sonarr = SonarrAPI(sonarr_url, sonarr_api_key)
 
 #connect to Connect To reciever server
-home_account = MyPlexAccount(home_token)
+home_account = MyPlexAccount(token=home_token)
 home_resources = home_account.resources()
 print(home_account)
 home_plex = home_account.resource(server_name).connect()
@@ -43,7 +43,7 @@ connected_server = home_plex.account()
 home_ip = (connected_server.publicAddress)
 
 #connect to sending server
-remote_account = MyPlexAccount(remote_token)
+remote_account = MyPlexAccount(token=remote_token)
 remote_resources = remote_account.resources()
 remote_plex = remote_account.resource(remote_server_name).connect()
 remote_connected_server = remote_plex.account()
