@@ -1,41 +1,39 @@
 # Plex-Remote-to-Local-Sync
-A small python script to sync files from a remote plex server to another plex server based on whats on the watchlist.
+
+Plex-Remote-to-Local-Sync is a Python script designed to backup media files from a remote Plex server to another Plex server based on items in the watchlist.
 
 # Requirements:
-openssh 
-plexapi
-sonarr
 
-# How to use
-add an item to your watchlist and run the script and the file will use rsync to transfer the file
+- openssh
+- plexapi
+- sonarr
 
-have the script run as a cronjob for automated server updating
+# How to Use:
 
-This script uses sonarr to reference whether a show is ongoing or ended to decide whether or not to remove them from your watchlist automatically
+1. Add an item to your Plex watchlist.
+2. Run the script.
+3. The script will search for media matching your watchlist item on the other server.
+4. Once found, it will sync the media from one Plex server to another.
+5. For films, it will remove them from your watchlist after syncing.
+6. For TV shows, if the Sonarr extension is set up, it will check if the show has ended and remove it from the watchlist accordingly.
 
-# How to configure:
+We recommend setting up the script to run as a cronjob for automated server syncing.
 
-you will need to setup an rsync daemon witha credentials secret on the server thats set to recieve the files: [guide to setup rsync daemon](https://www.atlantic.net/vps-hosting/how-to-setup-rsync-daemon-linux-server/)
+# How to Configure:
 
-as rsync runs in daemon mode it needs port 873 on the recievers router to be open.
+1. Run the Setup_PlexRsyncManager.py Python file.
+2. Follow the prompts to provide necessary information for the script to run.
+3. The script can be configured in different ways to accommodate various circumstances:
+    - Select Remote Shell Rsync or Daemon Rsync based on your preference.
+    - Choose whether you're sending from or receiving to the current machine.
+4. Provide the username of the remote computer for establishing the rsync connection.
+5. Input details for the sending server:
+    - Plex token
+    - Server name
+    - TV show and movie category names as they appear in Plex
+    - Folder locations (if using a daemon, provide the file location from the daemon root)
+6. Repeat the same for the receiving server.
+7. If you wish to integrate Sonarr, select Sonarr from the menu and input the URL (in http:// format) and the API key.
+8. Once setup is complete, the configuration details will be saved to a secrets.json file for future reference and editing.
 
-then on the server thats sending the files add this script and change the variables to reflect your desired states:
-
-user = 'user in the recievers rsync secrets file'
-
-#details for recieving server to send files and read watchlist
-home_token = 'plex token of user whos recieving server'
-home_tv_folder = '/TV/Folder/from/rsync/location/'
-home_movie_folder = '/Movie/Folder/from/rsync/location/'
-server_name = 'Name Of Plex Server to recieve files'
-
-#details for the sending server
-remote_token = 'token of user who managed sending server'
-tv_folder = '/TV/Folder/from/plex/location/'
-movie_folder = '/movie/Folder/from/plex/location/'
-remote_server_name='sending server name'
-
-#Sonarr connect
-# Set Host URL and API-Key
-sonarr_url = 'URL for Sonarr'
-sonarr_api_key = 'Sonarr API Key'
+After setup, it's recommended to run the PlexRsyncManager.py script once to ensure everything is working correctly. Then, set up a cronjob to run the script at your desired time for automatic syncing.
