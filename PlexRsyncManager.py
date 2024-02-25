@@ -80,21 +80,23 @@ while item < len(watchlist):
                     dir_length = ("{}".format(directory))
                     dir_list = dir_length.split('/')
                     directory = directory.parts[len(dir_list)-3]
+                    show_directory = directory
                     directory = sending_TV_folder+directory
                     print("syncing {}...".format(title))
                     if rsync_Direction == "receive_to":
                         if rsync_Mode == "daemon_rsync":
-                            subprocess.run(["rsync", "-avO", "--ignore-existing", "--bwlimit=100000","--progress", "{}@{}::{}/".format(remote_username, sending_ip, directory),"{}".format(recieving_tv_folder)])
+                            subprocess.run(["rsync", "-avO", "--ignore-existing", "--bwlimit=100000","--progress", "{}@{}::{}/".format(remote_username, sending_ip, directory),"{}{}".format(recieving_tv_folder, show_directory)])
                         elif rsync_Mode == "remote_shell_rsync":
-                            subprocess.run(["rsync", "-avO", "--ignore-existing", "--bwlimit=100000","--progress", "{}@{}:{}/".format(remote_username, sending_ip, directory),"{}".format(recieving_tv_folder)])
+                            print("rsync", "-avO", "--ignore-existing", "--bwlimit=100000","--progress", "{}@{}:{}/".format(remote_username, sending_ip, directory),"{}{}".format(recieving_tv_folder, show_directory))
+                            subprocess.run(["rsync", "-avO", "--ignore-existing", "--bwlimit=100000","--progress", "{}@{}:{}/".format(remote_username, sending_ip, directory),"{}{}".format(recieving_tv_folder, show_directory)])
                         else:
                             print("Rsync Setup Script not run please run that to populate the secrets file")
                             exit
                     elif rsync_Direction == "send_from":
                         if rsync_Mode == "daemon_rsync":
-                            subprocess.run(["rsync", "-avO", "--ignore-existing", "--bwlimit=100000","--progress","{}".format(recieving_tv_folder), "{}@{}::{}/".format(remote_username, sending_ip, directory)])
+                            subprocess.run(["rsync", "-avO", "--ignore-existing", "--bwlimit=100000","--progress","{}{}".format(recieving_tv_folder, show_directory), "{}@{}::{}/".format(remote_username, sending_ip, directory)])
                         elif rsync_Mode == "remote_shell_rsync":
-                            subprocess.run(["rsync", "-avO", "--ignore-existing", "--bwlimit=100000","--progress","{}".format(recieving_tv_folder), "{}@{}:{}/".format(remote_username, sending_ip, directory)])
+                            subprocess.run(["rsync", "-avO", "--ignore-existing", "--bwlimit=100000","--progress","{}{}".format(recieving_tv_folder, show_directory), "{}@{}:{}/".format(remote_username, sending_ip, directory)])
                         else:
                             print("Rsync Setup Script not run please run that to populate the secrets file")
                             exit
