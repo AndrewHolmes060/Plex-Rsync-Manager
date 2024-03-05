@@ -47,7 +47,7 @@ def setup_remote_server():
     secrets_data["sending Server Details"] = {
         "remote_username": remote_username,
         "sending_Server_name": sending_Server_name,
-        "sending_TV_Name": sending_TV_name,
+        "sending_TV_name": sending_TV_name,
         "sending_Movies_name": sending_Movies_name,
         "sending_Plex_token": sending_Plex_token,
         "sending_TV_folder": sending_TV_folder,

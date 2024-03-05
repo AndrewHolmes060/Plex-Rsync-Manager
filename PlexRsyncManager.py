@@ -44,10 +44,12 @@ sonarr = SonarrAPI(sonarr_url, sonarr_api_key)
 #connect to Connect To sending server
 sending_account = MyPlexAccount(token=sending_Plex_token)
 sending_resources = sending_account.resources()
-print(sending_account)
+
 sending_plex = sending_account.resource(sending_Server_name).connect()
 sending_connected_server = sending_plex.account()
 sending_ip = (sending_connected_server.publicAddress)
+sending_url = ("http://"+sending_connected_server.publicAddress+":"+sending_connected_server.publicPort)
+
 
 #connect to recieving server
 recieving_account = MyPlexAccount(token=recieving_Plex_token)
@@ -56,11 +58,13 @@ recieving_plex = recieving_account.resource(recieving_server_name).connect()
 recieving_connected_server = recieving_plex.account()
 recieving_url = ("http://"+recieving_connected_server.publicAddress+":"+recieving_connected_server.publicPort)
 
+
+print("---------------------------------\n---- Rsyncing from {} to {} ----\n---------------------------------".format(sending_account, recieving_account))
 #connect to sending server
-plex = PlexServer(recieving_url, recieving_Plex_token)
+plex = PlexServer(sending_url, sending_Plex_token)
 
 #get user watchlist
-watchlist = sending_account.watchlist()
+watchlist = recieving_account.watchlist()
 print (watchlist)
 item = 0
 while item < len(watchlist):
@@ -87,7 +91,6 @@ while item < len(watchlist):
                         if rsync_Mode == "daemon_rsync":
                             subprocess.run(["rsync", "-avO", "--ignore-existing", "--bwlimit=100000","--progress", "{}@{}::{}/".format(remote_username, sending_ip, directory),"{}{}".format(recieving_tv_folder, show_directory)])
                         elif rsync_Mode == "remote_shell_rsync":
-                            print("rsync", "-avO", "--ignore-existing", "--bwlimit=100000","--progress", "{}@{}:{}/".format(remote_username, sending_ip, directory),"{}{}".format(recieving_tv_folder, show_directory))
                             subprocess.run(["rsync", "-avO", "--ignore-existing", "--bwlimit=100000","--progress", "{}@{}:{}/".format(remote_username, sending_ip, directory),"{}{}".format(recieving_tv_folder, show_directory)])
                         else:
                             print("Rsync Setup Script not run please run that to populate the secrets file")
