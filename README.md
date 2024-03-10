@@ -1,6 +1,6 @@
-# Plex-Remote-to-Local-Sync
+# Plex-Rsync-Manager
 
-Plex-Remote-to-Local-Sync is a Python script designed to backup media files from a remote Plex server to another Plex server based on items in the watchlist.
+Plex-Rsync-Manager is a Python script designed to backup media files from a remote Plex server to another Plex server based on items in the watchlist.
 
 # Requirements:
 
