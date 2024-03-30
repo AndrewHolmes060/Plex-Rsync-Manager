@@ -21,19 +21,21 @@ We recommend setting up the script to run as a cronjob for automated server sync
 
 # How to Configure:
 
-1. Run the Setup_PlexRsyncManager.py Python file.
-2. Follow the prompts to provide necessary information for the script to run.
-3. The script can be configured in different ways to accommodate various circumstances:
+1. Ensure python requirements are installed:
+   `pip install plexapi arrapi`
+3. Run the Setup_PlexRsyncManager.py Python file.
+4. Follow the prompts to provide necessary information for the script to run.
+5. The script can be configured in different ways to accommodate various circumstances:
     - Select Remote Shell Rsync or Daemon Rsync based on your preference.
     - Choose whether you're sending from or receiving to the current machine.
-4. Provide the username of the remote computer for establishing the rsync connection.
-5. Input details for the sending server:
-    - Plex token
+6. Provide the username of the remote computer for establishing the rsync connection.
+7. Input details for the sending server:
+    - [Plex token]`(https://support.plex.tv/articles/201998867-investigate-media-information-and-formats/)`
     - Server name
     - TV show and movie category names as they appear in Plex
     - Folder locations (if using a daemon, provide the file location from the daemon root)
-6. Repeat the same for the receiving server.
-7. If you wish to integrate Sonarr, select Sonarr from the menu and input the URL (in http:// format) and the API key.
-8. Once setup is complete, the configuration details will be saved to a secrets.json file for future reference and editing.
+8. Repeat the same for the receiving server.
+9. If you wish to integrate Sonarr, select Sonarr from the menu and input the URL (in http:// format) and the API key.
+10. Once setup is complete, the configuration details will be saved to a secrets.json file for future reference and editing.
 
 After setup, it's recommended to run the PlexRsyncManager.py script once to ensure everything is working correctly. Then, set up a cronjob to run the script at your desired time for automatic syncing.
