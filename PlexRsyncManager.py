@@ -77,7 +77,7 @@ while item < len(watchlist):
             title = (Watchlist_item.title)
             try:
                 #get file location of tv folder to sync
-                last_episode = sending_plex.library.section('TV shows').get('{}'.format(title)).episodes()[-1]
+                last_episode = sending_plex.library.section(sending_TV_folder).get('{}'.format(title)).episodes()[-1]
                 for part in last_episode.iterParts():
                     directory = (part.file)
                     directory = pathlib.Path(directory)
@@ -111,11 +111,11 @@ while item < len(watchlist):
                     print("This show status is: {}".format(sonarr_status))
                     if sonarr_status == "ended":
                         #get the list of episodes on the sending server
-                        sending_episodes = set(plex.library.section('TV shows').get('{}'.format(title)).episodes())
+                        sending_episodes = set(plex.library.section(sending_TV_folder').get('{}'.format(title)).episodes())
                         sending_formatted_episodes = ["<{}-{}-{}>".format(title, episode.seasonNumber, episode.index) for episode in sending_episodes]
                         sending_formatted_episodes = set(sending_formatted_episodes)
                         #get the list of episodes on the home server
-                        home_episodes = set(sending_plex.library.section('TV shows').get('{}'.format(title)).episodes())
+                        home_episodes = set(sending_plex.library.section(sending_TV_folder).get('{}'.format(title)).episodes())
                         home_formatted_episodes = ["<{}-{}-{}>".format(title, episode.seasonNumber, episode.index) for episode in home_episodes]
                         home_formatted_episodes = set(home_formatted_episodes)
                         #check if the sending server's episodes are a subset of the home server's episodes
